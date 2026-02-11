@@ -4,13 +4,10 @@
   <meta charset="UTF-8" />
   <title>Interactive Multimedia Experience</title>
 
-  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-  <!-- CSS -->
   <link rel="stylesheet" href="css/style.css">
 
-  <!-- p5 Libraries -->
+  <!-- p5.js and p5.sound libraries -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/addons/p5.sound.min.js"></script>
 </head>
@@ -19,17 +16,29 @@
 
 <div class="app-container">
 
-  <h1><i class="fa-solid fa-leaf"></i> Interactive Multimedia Nature Experience</h1>
+  <h1><i class="fa-solid fa-leaf"></i> Interactive Multimedia Experience</h1>
 
   <div id="canvas-holder"></div>
 
-  <div class="controls">
-    <button id="playMusic"><i class="fa-solid fa-play"></i> Music</button>
-    <button id="pauseMusic"><i class="fa-solid fa-pause"></i></button>
-    <button id="loopMusic"><i class="fa-solid fa-repeat"></i></button>
+  <div class="upload-panel">
+    <label class="upload-btn" title="Select your own music">
+      <i class="fa-solid fa-music"></i>
+      <input type="file" id="musicInput" accept="audio/*">
+    </label>
 
-    <button id="playVideo"><i class="fa-solid fa-film"></i> Video</button>
-    <button id="pauseVideo"><i class="fa-solid fa-video-slash"></i></button>
+    <label class="upload-btn" title="Select your own video">
+      <i class="fa-solid fa-film"></i>
+      <input type="file" id="videoInput" accept="video/*">
+    </label>
+  </div>
+
+  <div class="controls">
+    <button id="playMusic" title="Play music"><i class="fa-solid fa-play"></i></button>
+    <button id="pauseMusic" title="Pause music"><i class="fa-solid fa-pause"></i></button>
+    <button id="loopMusic" title="Loop music"><i class="fa-solid fa-repeat"></i></button>
+
+    <button id="playVideo" title="Play video"><i class="fa-solid fa-video"></i></button>
+    <button id="pauseVideo" title="Pause video"><i class="fa-solid fa-video-slash"></i></button>
   </div>
 
 </div>
