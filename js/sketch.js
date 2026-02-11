@@ -8,24 +8,33 @@ let volume = 0.7;
 let speed = 1;
 let loopEnabled = false;
 
+function getCanvasSize() {
+  if (windowWidth < 500) {
+    return { w: windowWidth - 20, h: 280 };
+  } else if (windowWidth < 900) {
+    return { w: windowWidth - 40, h: 350 };
+  } else {
+    return { w: 1000, h: 450 };
+  }
+}
+
 function setup() {
-  let canvas = createCanvas(windowWidth > 1100 ? 1000 : windowWidth - 40, 450);
+  let size = getCanvasSize();
+  let canvas = createCanvas(size.w, size.h);
   canvas.parent("canvas-holder");
 
   fft = new p5.FFT();
 
-  for (let i = 0; i < 180; i++) particles.push(new Particle());
+  for (let i = 0; i < 160; i++) particles.push(new Particle());
 
   setupControls();
 
-  // Double click canvas → fullscreen
-  canvas.doubleClicked(() => {
-    fullscreen(!fullscreen());
-  });
+  canvas.doubleClicked(() => fullscreen(!fullscreen()));
 }
 
 function windowResized() {
-  resizeCanvas(windowWidth > 1100 ? 1000 : windowWidth - 40, 450);
+  let size = getCanvasSize();
+  resizeCanvas(size.w, size.h);
 }
 
 function setupControls() {
