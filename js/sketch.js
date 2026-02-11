@@ -6,6 +6,7 @@ let videoPlaying = false;
 let fade = 0;
 let volume = 0.7;
 let speed = 1;
+let loopEnabled = false;
 
 function setup() {
   let canvas = createCanvas(windowWidth > 1100 ? 1000 : windowWidth - 40, 450);
@@ -16,6 +17,11 @@ function setup() {
   for (let i = 0; i < 180; i++) particles.push(new Particle());
 
   setupControls();
+
+  // Double click canvas → fullscreen
+  canvas.doubleClicked(() => {
+    fullscreen(!fullscreen());
+  });
 }
 
 function windowResized() {
@@ -38,7 +44,11 @@ function setupControls() {
 
   musicInput.onchange = e => {
     if (music) music.stop();
-    music = loadSound(URL.createObjectURL(e.target.files[0]));
+    music = loadSound(URL.createObjectURL(e.target.files[0]), () => {
+      music.setVolume(volume);
+      music.rate(speed);
+      music.setLoop(loopEnabled);
+    });
   };
 
   videoInput.onchange = e => {
@@ -48,21 +58,22 @@ function setupControls() {
   };
 
   volSlider.oninput = e => {
-    volume = e.target.value;
+    volume = parseFloat(e.target.value);
     if (music) music.setVolume(volume);
   };
 
   speedSlider.oninput = e => {
-    speed = e.target.value;
+    speed = parseFloat(e.target.value);
     if (music) music.rate(speed);
     if (video) video.speed(speed);
   };
 
   document.getElementById("playMusic").onclick = e => {
-    if (music && !music.isPlaying()) {
-      music.play();
+    if (music) {
+      if (!music.isPlaying()) music.play();
       music.setVolume(volume);
       music.rate(speed);
+      music.setLoop(loopEnabled);
       activate(e.target.closest("button"));
     }
   };
@@ -76,7 +87,8 @@ function setupControls() {
 
   document.getElementById("loopMusic").onclick = e => {
     if (music) {
-      music.setLoop(!music.isLooping());
+      loopEnabled = !loopEnabled;
+      music.setLoop(loopEnabled);
       activate(e.target.closest("button"));
     }
   };
@@ -98,6 +110,11 @@ function setupControls() {
       activate(e.target.closest("button"));
     }
   };
+
+  document.getElementById("fullscreenBtn").onclick = e => {
+    fullscreen(!fullscreen());
+    activate(e.target.closest("button"));
+  };
 }
 
 function draw() {
@@ -110,24 +127,22 @@ function draw() {
     noTint();
   }
 
-  drawWaveVisualizer();
+  drawVisualizer();
 
   particles.forEach(p => p.update());
 }
 
-function drawWaveVisualizer() {
+function drawVisualizer() {
   if (!music || !music.isPlaying()) return;
 
-  let wave = fft.waveform();
-  stroke(0, 255, 180, 180);
-  noFill();
-  beginShape();
-  for (let i = 0; i < wave.length; i++) {
-    let x = map(i, 0, wave.length, 0, width);
-    let y = map(wave[i], -1, 1, height - 120, height - 20);
-    vertex(x, y);
+  let spectrum = fft.analyze();
+  noStroke();
+
+  for (let i = 0; i < spectrum.length; i += 10) {
+    let h = map(spectrum[i], 0, 255, 0, 140);
+    fill(255, 140, 0, 160);
+    rect(i * 2, height - h, 8, h, 4);
   }
-  endShape();
 }
 
 class Particle {
@@ -135,20 +150,15 @@ class Particle {
     this.x = random(width);
     this.y = random(height);
     this.size = random(2, 5);
-    this.angle = random(TWO_PI);
     this.speed = random(0.5, 1.2);
   }
 
   update() {
-    let waveBoost = music && music.isPlaying() ? 2 : 1;
-    this.y -= this.speed * waveBoost;
-    this.x += sin(this.angle) * 0.6;
-
+    let boost = music && music.isPlaying() ? 2 : 1;
+    this.y -= this.speed * boost;
     if (this.y < 0) this.y = height;
 
     fill(120, 255, 200, 160);
     circle(this.x, this.y, this.size);
-
-    this.angle += 0.02;
   }
 }
