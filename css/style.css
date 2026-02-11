@@ -130,6 +130,11 @@ button, .upload-btn {
     gap: 10px;
   }
 
+  .app-container {
+  max-height: 95svh;
+  overflow: hidden;
+}
+
   h1 {
     font-size: 1.1rem;
     line-height: 1.3;

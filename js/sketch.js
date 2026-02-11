@@ -1,3 +1,4 @@
+let lastWidth = window.innerWidth;
 let music, video;
 let fft;
 let particles = [];
@@ -33,8 +34,11 @@ function setup() {
 }
 
 function windowResized() {
-  let size = getCanvasSize();
-  resizeCanvas(size.w, size.h);
+  if (Math.abs(window.innerWidth - lastWidth) > 80) {
+    lastWidth = window.innerWidth;
+    let size = getCanvasSize();
+    resizeCanvas(size.w, size.h);
+  }
 }
 
 function setupControls() {
