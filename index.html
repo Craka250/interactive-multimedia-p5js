@@ -7,7 +7,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
 
-  <!-- p5.js and p5.sound libraries -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/addons/p5.sound.min.js"></script>
 </head>
@@ -21,24 +20,36 @@
   <div id="canvas-holder"></div>
 
   <div class="upload-panel">
-    <label class="upload-btn" title="Select your own music">
+    <label class="upload-btn" title="Select Music">
       <i class="fa-solid fa-music"></i>
       <input type="file" id="musicInput" accept="audio/*">
     </label>
 
-    <label class="upload-btn" title="Select your own video">
+    <label class="upload-btn" title="Select Video">
       <i class="fa-solid fa-film"></i>
       <input type="file" id="videoInput" accept="video/*">
     </label>
   </div>
 
-  <div class="controls">
-    <button id="playMusic" title="Play music"><i class="fa-solid fa-play"></i></button>
-    <button id="pauseMusic" title="Pause music"><i class="fa-solid fa-pause"></i></button>
-    <button id="loopMusic" title="Loop music"><i class="fa-solid fa-repeat"></i></button>
+  <div class="sliders">
+    <div>
+      <i class="fa-solid fa-volume-high"></i>
+      <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.7">
+    </div>
 
-    <button id="playVideo" title="Play video"><i class="fa-solid fa-video"></i></button>
-    <button id="pauseVideo" title="Pause video"><i class="fa-solid fa-video-slash"></i></button>
+    <div>
+      <i class="fa-solid fa-gauge-high"></i>
+      <input type="range" id="speedSlider" min="0.5" max="2" step="0.05" value="1">
+    </div>
+  </div>
+
+  <div class="controls">
+    <button id="playMusic"><i class="fa-solid fa-play"></i></button>
+    <button id="pauseMusic"><i class="fa-solid fa-pause"></i></button>
+    <button id="loopMusic"><i class="fa-solid fa-repeat"></i></button>
+
+    <button id="playVideo"><i class="fa-solid fa-video"></i></button>
+    <button id="pauseVideo"><i class="fa-solid fa-video-slash"></i></button>
   </div>
 
 </div>

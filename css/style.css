@@ -66,6 +66,37 @@ button:hover,
   display: none;
 }
 
+.sliders {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.sliders div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+input[type="range"] {
+  width: 120px;
+  accent-color: orange;
+}
+
+button.active {
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  box-shadow: 0 0 15px rgba(255,140,0,0.9);
+}
+
+button.wave {
+  animation: pulse 1.2s infinite alternate;
+}
+
+@keyframes pulse {
+  from { box-shadow: 0 0 8px rgba(255,140,0,0.5); }
+  to   { box-shadow: 0 0 20px rgba(255,140,0,1); }
+}
+
 @media(max-width: 700px){
   h1 {
     font-size: 1.3rem;
