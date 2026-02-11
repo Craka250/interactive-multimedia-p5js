@@ -27,6 +27,14 @@ function setup(){
   for(let i=0;i<180;i++) particles.push(new Particle());
 
   setupControls();
+
+  document.body.addEventListener("touchstart", unlockAudio, { once:true });
+  document.body.addEventListener("click", unlockAudio, { once:true });
+
+  function unlockAudio(){
+    getAudioContext().resume();
+    showToast("🔓 Audio unlocked — ready!");
+  }
 }
 
 function windowResized(){
@@ -38,27 +46,48 @@ function setupControls(){
   const musicInput=document.getElementById("musicInput");
   const videoInput=document.getElementById("videoInput");
 
-  musicInput.onchange=e=>{
-    if(music) music.stop();
-    const file = e.target.files[0];
-    if(!file) return;
+  musicInput.onchange = e => {
+    showToast("📂 Selecting audio...");
 
-    music=loadSound(URL.createObjectURL(file),()=>{
-      music.setVolume(volume);
-      music.rate(speed);
-      showToast("🎵 Audio Loaded");
-    });
+    setTimeout(() => {
+      const file = e.target.files[0];
+
+      if (!file) {
+        showToast("⚠ No audio selected");
+        return;
+      }
+
+      if (music) music.stop();
+
+      music = loadSound(URL.createObjectURL(file), () => {
+        music.setVolume(volume);
+        music.rate(speed);
+        showToast("🎵 Audio Loaded");
+      });
+
+    }, 300);
   };
 
-  videoInput.onchange=e=>{
-    if(video) video.remove();
-    const file = e.target.files[0];
-    if(!file) return;
+  videoInput.onchange = e => {
+    showToast("📂 Selecting video...");
 
-    video=createVideo(URL.createObjectURL(file),()=>{
-      showToast("🎬 Video Loaded");
-    });
-    video.hide();
+    setTimeout(() => {
+      const file = e.target.files[0];
+
+      if (!file) {
+        showToast("⚠ No video selected");
+        return;
+      }
+
+      if (video) video.remove();
+
+      video = createVideo(URL.createObjectURL(file), () => {
+        showToast("🎬 Video Loaded");
+      });
+
+      video.hide();
+
+    }, 300);
   };
 
   volumeSlider.oninput=e=>{
@@ -101,6 +130,12 @@ function setupControls(){
   };
 
   fullscreenBtn.onclick=()=> fullscreen(!fullscreen());
+
+  document.querySelectorAll("[data-tip]").forEach(el => {
+    el.addEventListener("click", () => {
+      showToast(el.getAttribute("data-tip"));
+    });
+  });
 }
 
 function draw(){

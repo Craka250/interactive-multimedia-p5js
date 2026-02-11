@@ -11,13 +11,24 @@ html, body {
 }
 
 body {
-  background:
-    linear-gradient(rgba(2,6,23,.75), rgba(30,41,59,.85)),
-    url("../assets/kriemer-fall-7562668_1280.jpg") center/cover no-repeat;
   display: flex;
   justify-content: center;
   align-items: center;
   color: white;
+  overflow: hidden;
+  background: #020617;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    linear-gradient(rgba(2,6,23,.75), rgba(30,41,59,.85)),
+    url("../assets/kriemer-fall-7562668_1280.jpg") center/cover no-repeat;
+  z-index: -1;
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .app-container {
@@ -32,6 +43,10 @@ body {
   flex-direction: column;
   gap: 14px;
   overflow: hidden;
+}
+
+.app-container {
+  max-height: none;
 }
 
 .title {
