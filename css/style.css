@@ -25,7 +25,7 @@ body {
   max-width: 1200px;
   min-height: 92svh;
   background: rgba(255,255,255,0.08);
-  backdrop-filter: blur(15px);
+  backdrop-filter: blur(5px);
   border-radius: 18px;
   padding: 18px;
   display: flex;
