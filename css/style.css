@@ -34,6 +34,10 @@ body {
   gap: 15px;
 }
 
+.app-container {
+  min-height: 85svh;
+}
+
 h1 {
   font-size: 1.6rem;
 }
