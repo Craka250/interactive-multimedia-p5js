@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Interactive Multimedia Experience</title>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
 
- <!-- p5.js and p5.sound libraries -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/addons/p5.sound.min.js"></script>
 </head>
@@ -16,18 +16,23 @@
 
 <div class="app-container">
 
-  <h1><i class="fa-solid fa-leaf"></i> Interactive Multimedia Experience</h1>
+  <h1 class="title">
+    <i class="fa-solid fa-leaf"></i>
+    Interactive Multimedia Experience
+  </h1>
 
   <div id="canvas-holder"></div>
 
   <div class="upload-panel">
-    <label class="upload-btn" title="Select Music">
+    <label class="upload-btn" data-tip="Upload Audio">
       <i class="fa-solid fa-music"></i>
+      <span>Audio</span>
       <input type="file" id="musicInput" accept="audio/*">
     </label>
 
-    <label class="upload-btn" title="Select Video">
+    <label class="upload-btn" data-tip="Upload Video">
       <i class="fa-solid fa-film"></i>
+      <span>Video</span>
       <input type="file" id="videoInput" accept="video/*">
     </label>
   </div>
@@ -45,17 +50,17 @@
   </div>
 
   <div class="controls">
-    <button id="playMusic"><i class="fa-solid fa-play"></i></button>
-    <button id="pauseMusic"><i class="fa-solid fa-pause"></i></button>
-    <button id="loopMusic"><i class="fa-solid fa-repeat"></i></button>
-
-    <button id="playVideo"><i class="fa-solid fa-video"></i></button>
-    <button id="pauseVideo"><i class="fa-solid fa-video-slash"></i></button>
-
-    <button id="fullscreenBtn" title="Fullscreen"><i class="fa-solid fa-expand"></i></button>
+    <button id="playMusic" data-tip="Play Music"><i class="fa-solid fa-play"></i></button>
+    <button id="pauseMusic" data-tip="Pause Music"><i class="fa-solid fa-pause"></i></button>
+    <button id="loopMusic" data-tip="Loop Music"><i class="fa-solid fa-repeat"></i></button>
+    <button id="playVideo" data-tip="Play Video"><i class="fa-solid fa-video"></i></button>
+    <button id="pauseVideo" data-tip="Pause Video"><i class="fa-solid fa-video-slash"></i></button>
+    <button id="fullscreenBtn" data-tip="Fullscreen"><i class="fa-solid fa-expand"></i></button>
   </div>
 
 </div>
+
+<div id="toast"></div>
 
 <script src="js/sketch.js"></script>
 

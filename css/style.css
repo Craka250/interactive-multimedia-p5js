@@ -2,164 +2,135 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Segoe UI", system-ui, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont;
 }
 
 html, body {
   height: 100%;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 body {
-  min-height: 100svh;
+  background:
+    linear-gradient(rgba(2,6,23,.75), rgba(30,41,59,.85)),
+    url("../assets/phgvu307-autumn-7493439_1280.jpg") center/cover no-repeat;
   display: flex;
   justify-content: center;
   align-items: center;
-  background:
-    linear-gradient(rgba(2,6,23,.65), rgba(30,41,59,.7)),
-    url("../assets/phgvu307-autumn-7493439_1280.jpg") center/cover no-repeat;
   color: white;
 }
 
 .app-container {
   width: 95%;
-  max-width: 1100px;
-  background: rgba(255,255,255,0.06);
+  max-width: 1200px;
+  min-height: 92svh;
+  background: rgba(255,255,255,0.08);
   backdrop-filter: blur(15px);
-  border-radius: 20px;
-  padding: 20px;
-  text-align: center;
+  border-radius: 18px;
+  padding: 18px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 14px;
+  overflow: hidden;
 }
 
-.app-container {
-  min-height: 85svh;
-}
-
-h1 {
-  font-size: 1.6rem;
+.title {
+  text-align: center;
+  font-size: 1.4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
 }
 
 #canvas-holder {
   display: flex;
   justify-content: center;
+  overflow: hidden;
+  border-radius: 14px;
 }
 
-.controls,
-.upload-panel {
+.controls, .upload-panel, .sliders {
   display: flex;
   justify-content: center;
-  gap: 12px;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
-button,
-.upload-btn {
+button, .upload-btn {
   background: linear-gradient(135deg, #22c55e, #16a34a);
   border: none;
-  color: white;
-  padding: 12px 14px;
+  padding: 11px 14px;
   border-radius: 12px;
+  color: white;
   cursor: pointer;
-  font-size: 1rem;
-  transition: 0.3s ease;
+  font-size: .9rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+  transition: background .25s, box-shadow .25s;
 }
 
-button:hover,
-.upload-btn:hover {
+button:hover, .upload-btn:hover {
   background: linear-gradient(135deg, #38bdf8, #0ea5e9);
-  transform: scale(1.08);
+  box-shadow: 0 0 12px rgba(56,189,248,.7);
 }
 
 .upload-btn input {
   display: none;
 }
 
-.sliders {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
+button.active {
+  background: linear-gradient(135deg,#f97316,#ea580c);
+  box-shadow: 0 0 15px rgba(255,140,0,.9);
+}
+
+[data-tip]:hover::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,.75);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: .7rem;
+  white-space: nowrap;
 }
 
 .sliders div {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 input[type="range"] {
-  width: 120px;
+  width: 140px;
   accent-color: orange;
 }
 
-button.active {
-  background: linear-gradient(135deg, #f97316, #ea580c);
-  box-shadow: 0 0 15px rgba(255,140,0,0.9);
+#toast {
+  position: fixed;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,.9);
+  padding: 10px 16px;
+  border-radius: 14px;
+  opacity: 0;
+  pointer-events: none;
+  transition: .4s;
+  z-index: 200;
 }
 
-button.wave {
-  animation: pulse 1.2s infinite alternate;
+#toast.show {
+  opacity: 1;
+  bottom: 36px;
 }
 
-button, .upload-btn {
-  touch-action: manipulation;
-}
-
-@keyframes pulse {
-  from { box-shadow: 0 0 8px rgba(255,140,0,0.5); }
-  to   { box-shadow: 0 0 20px rgba(255,140,0,1); }
-}
-
-@media(max-width: 700px){
-  h1 {
-    font-size: 1.3rem;
-  }
-}
-
-@media (max-width: 600px) {
-
-  body {
-    background-attachment: scroll;
-  }
-
-  .app-container {
-    padding: 14px;
-    border-radius: 16px;
-    gap: 10px;
-  }
-
-  .app-container {
-  max-height: 95svh;
-  overflow: hidden;
-}
-
-  h1 {
-    font-size: 1.1rem;
-    line-height: 1.3;
-  }
-
-  .controls,
-  .upload-panel,
-  .sliders {
-    gap: 8px;
-  }
-
-  button,
-  .upload-btn {
-    padding: 10px 12px;
-    border-radius: 10px;
-    font-size: 0.9rem;
-  }
-
-  .sliders {
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  input[type="range"] {
-    width: 100%;
-  }
-
+@media(max-width:600px){
+  .title { font-size: 1.05rem; }
+  .sliders { flex-direction: column; }
+  input[type="range"]{ width: 100%; }
 }

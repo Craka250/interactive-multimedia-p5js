@@ -1,177 +1,141 @@
-let lastWidth = window.innerWidth;
-let music, video;
-let fft;
-let particles = [];
+let music, video, fft;
+let particles=[];
+let volume=0.7, speed=1;
+let videoPlaying=false;
 
-let videoPlaying = false;
-let fade = 0;
-let volume = 0.7;
-let speed = 1;
-let loopEnabled = false;
-
-function getCanvasSize() {
-  if (windowWidth < 500) {
-    return { w: windowWidth - 20, h: 280 };
-  } else if (windowWidth < 900) {
-    return { w: windowWidth - 40, h: 350 };
-  } else {
-    return { w: 1000, h: 450 };
-  }
+function showToast(msg){
+  const t=document.getElementById("toast");
+  t.innerText=msg;
+  t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"),1800);
 }
 
-function setup() {
-  let size = getCanvasSize();
-  let canvas = createCanvas(size.w, size.h);
+function getCanvasSize(){
+  return {
+    w: Math.min(window.innerWidth - 20, 1100),
+    h: window.innerHeight * 0.42
+  };
+}
+
+function setup(){
+  let s=getCanvasSize();
+  let canvas=createCanvas(s.w,s.h);
   canvas.parent("canvas-holder");
 
-  fft = new p5.FFT();
+  fft=new p5.FFT();
 
-  for (let i = 0; i < 160; i++) particles.push(new Particle());
+  for(let i=0;i<180;i++) particles.push(new Particle());
 
   setupControls();
-
-  canvas.doubleClicked(() => fullscreen(!fullscreen()));
 }
 
-function windowResized() {
-  if (Math.abs(window.innerWidth - lastWidth) > 80) {
-    lastWidth = window.innerWidth;
-    let size = getCanvasSize();
-    resizeCanvas(size.w, size.h);
-  }
+function windowResized(){
+  let s=getCanvasSize();
+  resizeCanvas(s.w,s.h);
 }
 
-function setupControls() {
-  const musicInput = document.getElementById("musicInput");
-  const videoInput = document.getElementById("videoInput");
+function setupControls(){
+  const musicInput=document.getElementById("musicInput");
+  const videoInput=document.getElementById("videoInput");
 
-  const volSlider = document.getElementById("volumeSlider");
-  const speedSlider = document.getElementById("speedSlider");
+  musicInput.onchange=e=>{
+    if(music) music.stop();
+    const file = e.target.files[0];
+    if(!file) return;
 
-  const btns = document.querySelectorAll("button");
-
-  function activate(btn) {
-    btns.forEach(b => b.classList.remove("active","wave"));
-    btn.classList.add("active","wave");
-  }
-
-  musicInput.onchange = e => {
-    if (music) music.stop();
-    music = loadSound(URL.createObjectURL(e.target.files[0]), () => {
+    music=loadSound(URL.createObjectURL(file),()=>{
       music.setVolume(volume);
       music.rate(speed);
-      music.setLoop(loopEnabled);
+      showToast("🎵 Audio Loaded");
     });
   };
 
-  videoInput.onchange = e => {
-    if (video) video.remove();
-    video = createVideo(URL.createObjectURL(e.target.files[0]));
+  videoInput.onchange=e=>{
+    if(video) video.remove();
+    const file = e.target.files[0];
+    if(!file) return;
+
+    video=createVideo(URL.createObjectURL(file),()=>{
+      showToast("🎬 Video Loaded");
+    });
     video.hide();
   };
 
-  volSlider.oninput = e => {
-    volume = parseFloat(e.target.value);
-    if (music) music.setVolume(volume);
+  volumeSlider.oninput=e=>{
+    volume=parseFloat(e.target.value);
+    if(music) music.setVolume(volume);
   };
 
-  speedSlider.oninput = e => {
-    speed = parseFloat(e.target.value);
-    if (music) music.rate(speed);
-    if (video) video.speed(speed);
+  speedSlider.oninput=e=>{
+    speed=parseFloat(e.target.value);
+    if(music) music.rate(speed);
+    if(video) video.speed(speed);
   };
 
-  document.getElementById("playMusic").onclick = e => {
-    if (music) {
-      if (!music.isPlaying()) music.play();
-      music.setVolume(volume);
-      music.rate(speed);
-      music.setLoop(loopEnabled);
-      activate(e.target.closest("button"));
-    }
+  playMusic.onclick=()=>{
+    if(!music) return showToast("⚠ Select Audio First");
+    music.play();
+    showToast("▶ Music Playing");
   };
 
-  document.getElementById("pauseMusic").onclick = e => {
-    if (music && music.isPlaying()) {
-      music.pause();
-      activate(e.target.closest("button"));
-    }
+  pauseMusic.onclick=()=>{
+    if(!music) return showToast("⚠ No Audio Loaded");
+    music.pause();
   };
 
-  document.getElementById("loopMusic").onclick = e => {
-    if (music) {
-      loopEnabled = !loopEnabled;
-      music.setLoop(loopEnabled);
-      activate(e.target.closest("button"));
-    }
+  loopMusic.onclick=()=>{
+    if(!music) return showToast("⚠ No Audio Loaded");
+    music.setLoop(!music.isLooping());
+    showToast("🔁 Loop Toggled");
   };
 
-  document.getElementById("playVideo").onclick = e => {
-    if (video) {
-      video.loop();
-      video.speed(speed);
-      videoPlaying = true;
-      fade = 0;
-      activate(e.target.closest("button"));
-    }
+  playVideo.onclick=()=>{
+    if(!video) return showToast("⚠ Select Video First");
+    video.loop();
+    video.speed(speed);
+    videoPlaying=true;
   };
 
-  document.getElementById("pauseVideo").onclick = e => {
-    if (video) {
-      video.pause();
-      videoPlaying = false;
-      activate(e.target.closest("button"));
-    }
+  pauseVideo.onclick=()=>{
+    if(video){ video.pause(); videoPlaying=false; }
   };
 
-  document.getElementById("fullscreenBtn").onclick = e => {
-    fullscreen(!fullscreen());
-    activate(e.target.closest("button"));
-  };
+  fullscreenBtn.onclick=()=> fullscreen(!fullscreen());
 }
 
-function draw() {
-  background(5, 15, 30);
+function draw(){
+  background(5,15,30);
 
-  if (videoPlaying && video) {
-    if (fade < 255) fade += 6;
-    tint(255, fade);
-    image(video, 0, 0, width, height);
-    noTint();
-  }
+  if(videoPlaying && video) image(video,0,0,width,height);
 
   drawVisualizer();
-
-  particles.forEach(p => p.update());
+  particles.forEach(p=>p.update());
 }
 
-function drawVisualizer() {
-  if (!music || !music.isPlaying()) return;
+function drawVisualizer(){
+  if(!music || !music.isPlaying()) return;
 
   let spectrum = fft.analyze();
   noStroke();
 
-  for (let i = 0; i < spectrum.length; i += 10) {
-    let h = map(spectrum[i], 0, 255, 0, 140);
-    fill(255, 140, 0, 160);
-    rect(i * 2, height - h, 8, h, 4);
+  for (let i=0;i<spectrum.length;i+=10){
+    let h = map(spectrum[i],0,255,0,height*0.6);
+    fill(255,140,0,160);
+    rect(i*2,height-h,8,h,6);
   }
 }
 
-class Particle {
-  constructor() {
-    this.x = random(width);
-    this.y = random(height);
-    this.size = random(2, 5);
-    this.speed = random(0.5, 1.2);
+class Particle{
+  constructor(){
+    this.x=random(width);
+    this.y=random(height);
+    this.s=random(2,5);
+    this.sp=random(.6,1.4);
   }
-
-  update() {
-    let boost = music && music.isPlaying() ? 2 : 1;
-    this.y -= this.speed * boost;
-    if (this.y < 0) this.y = height;
-
-    fill(120, 255, 200, 160);
-    circle(this.x, this.y, this.size);
+  update(){
+    this.y-=this.sp*(music&&music.isPlaying()?2:1);
+    if(this.y<0)this.y=height;
+    fill(120,255,200,160);
+    circle(this.x,this.y,this.s);
   }
 }
