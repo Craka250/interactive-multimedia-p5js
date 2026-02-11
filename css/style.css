@@ -5,14 +5,19 @@
   font-family: "Segoe UI", system-ui, sans-serif;
 }
 
+html, body {
+  height: 100%;
+  overflow-x: hidden;
+}
+
 body {
-  background:
-    linear-gradient(rgba(2,6,23,.65), rgba(30,41,59,.7)),
-    url("../assets/phgvu307-autumn-7493439_1280.jpg") center/cover no-repeat fixed;
-  min-height: 100vh;
+  min-height: 100svh;
   display: flex;
   justify-content: center;
   align-items: center;
+  background:
+    linear-gradient(rgba(2,6,23,.65), rgba(30,41,59,.7)),
+    url("../assets/phgvu307-autumn-7493439_1280.jpg") center/cover no-repeat;
   color: white;
 }
 
