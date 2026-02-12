@@ -1,6 +1,3 @@
-# Ignore heavy multimedia assets
-assets/
-
 # Ignore OS files
 .DS_Store
 Thumbs.db
