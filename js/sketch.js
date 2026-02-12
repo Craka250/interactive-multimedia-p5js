@@ -18,6 +18,15 @@ function getCanvasSize(){
 }
 
 function setup(){
+  const splash = document.getElementById("splash");
+  const enterBtn = document.getElementById("enterBtn");
+
+  enterBtn.onclick = () => {
+    splash.style.opacity = "0";
+    splash.style.pointerEvents = "none";
+    setTimeout(() => splash.remove(), 800);
+  };
+
   let s=getCanvasSize();
   let canvas=createCanvas(s.w,s.h);
   canvas.parent("canvas-holder");
