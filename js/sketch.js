@@ -2,6 +2,7 @@ let music, video, fft;
 let particles=[];
 let volume=0.7, speed=1;
 let videoPlaying=false;
+let videoMuted = false;
 
 function showToast(msg){
   const t=document.getElementById("toast");
@@ -135,8 +136,21 @@ function setupControls(){
   };
 
   pauseVideo.onclick=()=>{
-    if(video){ video.pause(); videoPlaying=false; }
+      if(video){ video.pause(); videoPlaying=false; }
   };
+
+    muteVideo.onclick = () => {
+      if(!video) return showToast("⚠ No Video Loaded");
+
+      videoMuted = !videoMuted;
+      video.volume(videoMuted ? 0 : 1);
+
+      muteVideo.innerHTML = videoMuted
+        ? '<i class="fa-solid fa-volume-high"></i>'
+        : '<i class="fa-solid fa-volume-xmark"></i>';
+
+      showToast(videoMuted ? "🔇 Video Muted" : "🔊 Video Unmuted");
+    };
 
   fullscreenBtn.onclick=()=> fullscreen(!fullscreen());
 
